@@ -519,7 +519,6 @@ $postratings_logs = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->r
 				<th><?php _e('Report Options:', 'wp-postratings'); ?>&nbsp;&nbsp;&nbsp;&nbsp;</th>				
 					<td>
 						<select name="report" size="1">	
-							<option value="null"> </option>
 							<option value="reports">Report</option>
 							<option value="iphost">Including Ip/Host</option>
 							<option value="greport">Group Report</option>

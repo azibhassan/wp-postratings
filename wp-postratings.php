@@ -74,45 +74,45 @@ function download_csv() {
 		global $wpdb;
 		$selected_report = $_POST['report'];
 	
-		if($selected_report == "reports"){
+		if( $selected_report == "reports" ){
 			
-			$sql = mysql_query("SELECT rating_id,rating_postid,rating_posttitle,rating_rating,FROM_UNIXTIME(rating_timestamp,'%h:%i:%s %D %M %Y') AS 'Date And Time',rating_username,rating_userid FROM {$wpdb->ratings}") or die(mysql_error());
-	
-		} 
-		else if($selected_report == "iphost"){
+			$results = $wpdb-> get_results("SELECT rating_id,rating_postid,rating_posttitle,rating_rating,FROM_UNIXTIME(rating_timestamp,
+									'%h:%i:%s %D %M %Y') AS 'Date And Time',rating_username,rating_userid FROM {$wpdb->ratings}", ARRAY_A);
 		
-			$sql = mysql_query("SELECT rating_id,rating_postid,rating_posttitle,rating_rating,FROM_UNIXTIME(rating_timestamp,'%h:%i:%s %D %M %Y') AS 'Date And Time',rating_ip,rating_host,rating_username,rating_userid FROM {$wpdb->ratings}") or die(mysql_error());
+		} 
+		else if( $selected_report == "iphost" ){
+		
+			$results = $wpdb->get_results("SELECT rating_id,rating_postid,rating_posttitle,rating_rating,FROM_UNIXTIME(rating_timestamp,
+						'%h:%i:%s %D %M %Y') AS 'Date And Time',rating_ip,rating_host,rating_username,rating_userid FROM {$wpdb->ratings}", ARRAY_A); 
 			
 			}
-		else if($selected_report == "greport") {
+		else if( $selected_report == "greport" ) {
 		
-			$sql = mysql_query("SELECT rating_postid,rating_posttitle,COUNT(rating_rating) AS Count,AVG(rating_rating) as Average FROM {$wpdb->ratings} WHERE 1=1	GROUP BY rating_postid,rating_posttitle") or die(mysql_error());
+			$results = $wpdb->get_results("SELECT rating_postid,rating_posttitle,COUNT(rating_rating) AS Count,AVG(rating_rating) as Average FROM {$wpdb->ratings} WHERE 1=1	GROUP BY rating_postid,rating_posttitle", ARRAY_A);
 			
 		}
-		generate_csv($sql);
+		generate_csv( $sql );
 		exit;
   	}
 } 
-function generate_csv($sql){ 
+function generate_csv( $sql ){ 
 	
-		header('Content-Type: text/csv; charset=utf-8');
-		header('Content-Disposition: attachment; filename=data.csv'); 
-		
-	
-				$row = mysql_fetch_assoc($sql);
-				$fp = fopen('php://output','w');
-				
-				if($row)
-				{ 
-					fputcsv($fp, array_keys($row)); 
-					mysql_data_seek($sql,0); 
-				}
-				
-				while($row = mysql_fetch_assoc($sql))
-				{
-					fputcsv($fp, $row);
-				}	
-				fclose($fp);
+	if ( ! empty( $results ) ) {
+
+		header( 'Content-Type: text/csv; charset=utf-8' );
+		header( 'Content-Disposition: attachment; filename=data.csv' );
+
+		$fp = fopen( 'php://output', 'w' );
+
+		fputcsv( $fp, array_keys( $results[0] ) );
+
+		foreach ( $results as $row ) {
+					fputcsv( $fp, $row );
+				}		
+
+		fclose( $fp );
+
+	}
 }	
 
 ### Rating Logs Table Name
