@@ -88,37 +88,37 @@ function download_csv() {
 									'%h:%i:%s %D %M %Y') AS 'Date And Time',rating_username,rating_userid FROM {$wpdb->ratings}", ARRAY_A);
 		
 		} 
-		else if( $selected_report == "iphost" ){
+		else if($selected_report == "iphost"){
 		
 			$results = $wpdb->get_results("SELECT rating_id,rating_postid,rating_posttitle,rating_rating,FROM_UNIXTIME(rating_timestamp,
 						'%h:%i:%s %D %M %Y') AS 'Date And Time',rating_ip,rating_host,rating_username,rating_userid FROM {$wpdb->ratings}", ARRAY_A); 
 			
 			}
-		else if( $selected_report == "greport" ) {
+		else if($selected_report == "greport") {
 		
 			$results = $wpdb->get_results("SELECT rating_postid,rating_posttitle,COUNT(rating_rating) AS Count,AVG(rating_rating) as Average FROM {$wpdb->ratings} WHERE 1=1	GROUP BY rating_postid,rating_posttitle", ARRAY_A);
 			
 		}
-		generate_csv( $sql );
+		generate_csv($results);
 		exit;
   	}
 } 
-function generate_csv( $sql ){ 
+function generate_csv($results){ 
 	
-	if ( ! empty( $results ) ) {
+	if (!empty($results)) {
 
 		header( 'Content-Type: text/csv; charset=utf-8' );
 		header( 'Content-Disposition: attachment; filename=data.csv' );
 
 		$fp = fopen( 'php://output', 'w' );
 
-		fputcsv( $fp, array_keys( $results[0] ) );
+		fputcsv($fp, array_keys($results[0]) );
 
-		foreach ( $results as $row ) {
+		foreach ($results as $row) {
 					fputcsv( $fp, $row );
 				}		
 
-		fclose( $fp );
+		fclose($fp);
 
 	}
 }	
