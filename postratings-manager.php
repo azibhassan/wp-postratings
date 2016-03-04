@@ -513,17 +513,17 @@ $postratings_logs = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->r
 	<h3><?php _e('Post Ratings Logs To CSV','wp_postrating'); ?></h3>
 	<br style="clear" />
 	<form method="post" action="<?php echo esc_url( $base_page ); ?>" >
-	<?php wp_nonce_field('Post-Rating-to-CSV'); ?>
+	<?php wp_nonce_field('wp-postratings_csv'); ?>
 		<table class="widefat">
 			<tr>
 				<th><?php _e('Report Options:', 'wp-postratings'); ?>&nbsp;&nbsp;&nbsp;&nbsp;</th>				
-					<td>
-						<select name="report" size="1">	
+				<td>
+					<select name="report" size="1">	
 							<option value="reports"><?php _e('Report', 'wp-postratings'); ?></option>
 							<option value="iphost"><?php _e('Including Ip/Host', 'wp-postratings'); ?></option>
 							<option value="greport"><?php _e('Group Report', 'wp-postratings'); ?></option>
-						</select>
-					</td>
+					</select>
+				</td>
 			</tr>
 			<tr class="alternate">
 				<td colspan="2" align="center"><input type="submit" name="submit" value="<?php _e('Download', 'wp-postratings'); ?>" class="button" /></td>
